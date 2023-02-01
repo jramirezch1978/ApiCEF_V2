@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Intercorp.CEFReports.Application.DTO\Intercorp.CEFReports.Application.DTO.csproj" />
+    <ProjectReference Include="..\Intercorp.CEFReports.Application.Interface\Intercorp.CEFReports.Application.Interface.csproj" />
+    <ProjectReference Include="..\Intercorp.CEFReports.Application.Main\Intercorp.CEFReports.Application.Main.csproj" />
+    <ProjectReference Include="..\Intercorp.CEFReports.Domain.Core\Intercorp.CEFReports.Domain.Core.csproj" />
+    <ProjectReference Include="..\Intercorp.CEFReports.Infrastructure.Data\Intercorp.CEFReports.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\Intercorp.CEFReports.Domain.Interface\Intercorp.CEFReports.Domain.Interface.csproj" />
+    <ProjectReference Include="..\Intercorp.CEFReports.Infrastructure.Interface\Intercorp.CEFReports.Infrastructure.Interface.csproj" />
+    <ProjectReference Include="..\Intercorp.CEFReports.Infrastructure.Repository\Intercorp.CEFReports.Infrastructure.Repository.csproj" />
+    <ProjectReference Include="..\Intercorp.CEFReports.Transversal.Common\Intercorp.CEFReports.Transversal.Common.csproj" />
+    <ProjectReference Include="..\Intercorp.CEFReports.Transversal.Mapper\Intercorp.CEFReports.Transversal.Mapper.csproj" />
+  </ItemGroup>
+
+</Project>
