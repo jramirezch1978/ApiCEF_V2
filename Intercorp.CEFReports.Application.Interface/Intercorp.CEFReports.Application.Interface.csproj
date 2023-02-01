@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Intercorp.CEFReports.Application.DTO\Intercorp.CEFReports.Application.DTO.csproj" />
+    <ProjectReference Include="..\Intercorp.CEFReports.Transversal.Common\Intercorp.CEFReports.Transversal.Common.csproj" />
+  </ItemGroup>
+
+</Project>
