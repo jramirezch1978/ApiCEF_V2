@@ -64,6 +64,24 @@ namespace Intercorp.CEFReports.Services
             services.AddScoped<IReconciliacionPatrimonioDomain, ReconciliacionPatrimonioDomain>();
             services.AddScoped<IReconciliacionPatrimonioRepository, ReconciliacionPatrimonioRepository>();
 
+            services.AddScoped<ICuentaAnalisisApplication, CuentaAnalisisApplication>();
+            services.AddScoped<ICuentaAnalisisDomain, CuentaAnalisisDomain>();
+            services.AddScoped<ICuentaAnalisisRepository, CuentaAnalisisRepository>();
+
+            services.AddScoped<IFuentesUsosFondosApplication, FuentesUsosFondosApplication>();
+
+            services.AddScoped<IFuentesUsosFondosxMonedaApplication, FuentesUsosFondosxMonedaApplication>();
+
+            services.AddScoped<IDesgloseCuentasImportantesApplication, DesgloseCuentasImportantesApplication>();
+
+            services.AddScoped<IRatiosFinancierosApplication, RatiosFinancierosApplication>();
+
+            services.AddScoped<IBalanceGeneralApplication, BalanceGeneralApplication>();
+
+            services.AddScoped<IEstadoGananciaPerdidaApplication, EstadoGananciaPerdidaApplication>();
+
+
+
             services.AddControllers().AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services.Configure<FormOptions>(o => {

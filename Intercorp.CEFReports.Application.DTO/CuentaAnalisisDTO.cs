@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Intercorp.CEFReports.Domain.Entity
+namespace Intercorp.CEFReports.Application.DTO
 {
-    public class ReconciliacionPatrimonio
+    public class CuentaAnalisisDTO
     {
         public int CodPeriodo1 { get; set; }
         public string FecPeriodo1 { get; set; }
@@ -39,7 +38,8 @@ namespace Intercorp.CEFReports.Domain.Entity
         public string Estado5 { get; set; }
         public string TipoCambio { get; set; }
         public string CodMoneda { get; set; }
-        public List<CuentaAnalisisDetalle>  CuentaAnalisis { get; set; }
+        public List<CuentaAnalisisDetalleDTO> CuentaAnalisisDetalle { get; set; }
+
 
     }
 }

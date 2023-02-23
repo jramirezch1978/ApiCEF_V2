@@ -9,6 +9,5 @@ namespace Intercorp.CEFReports.Infrastructure.Interface
     public interface IReconciliacionPatrimonioRepository
     {
         Task<ReconciliacionPatrimonio> ObtenerReconciliacionPatrimonio(ReconciliacionPatrimonioRequest request);
-        //Task<IEnumerable<ReconciliacionPatrimonioDetalle>> ListarReconciliacionPatrimonioesDetalle(ReconciliacionPatrimonioRequest request);
     }
 }

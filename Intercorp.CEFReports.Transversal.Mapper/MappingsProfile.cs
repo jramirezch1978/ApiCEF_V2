@@ -12,11 +12,17 @@ namespace Intercorp.CEFReports.Transversal.Mapper
             CreateMap<Client, ClientDTO>().ReverseMap();
 
             CreateMap<Proyeccion, ProyeccionDTO>().ReverseMap();
-            CreateMap<ProyeccionRequest, ProyeccionRequestDTO>().ReverseMap();
             CreateMap<ProyeccionDetalle, ProyeccionDetalleDTO>().ReverseMap();
+            CreateMap<ProyeccionRequest, ProyeccionRequestDTO>().ReverseMap();
 
-            CreateMap<ReconciliacionPatrimonioRequest, ReconciliacionPatrimonioRequestDTO>().ReverseMap();
             CreateMap<ReconciliacionPatrimonio, ReconciliacionPatrimonioDTO>().ReverseMap();
+            CreateMap<ReconciliacionPatrimonioRequest, ReconciliacionPatrimonioRequestDTO>().ReverseMap();
+
+            CreateMap<CuentaAnalisis, CuentaAnalisisDTO>().ReverseMap();
+            CreateMap<CuentaAnalisisDetalle, CuentaAnalisisDetalleDTO>().ReverseMap();
+            CreateMap<CuentaAnalisisRequest, CuentaAnalisisRequestDTO>().ReverseMap();
+
+
         }
     }
 }

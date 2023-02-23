@@ -38,7 +38,8 @@ namespace Intercorp.CEFReports.Application.DTO
         public string Estado5 { get; set; }
         public string TipoCambio { get; set; }
         public string CodMoneda { get; set; }
-        //public List<ProyeccionDetalleDTO> ProyeccionDetalle { get; set; }
+        public List<CuentaAnalisisDetalleDTO> CuentaAnalisisDetalle { get; set; }
+
 
     }
 }
