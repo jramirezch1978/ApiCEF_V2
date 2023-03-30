@@ -10,7 +10,7 @@
 		.divTable {
 			display: table;
 			width: 100%;
-			font-size: 10px;
+			font-size: 8px;
 			font-family: Arial;
 			font-weight: bold;
 		}
@@ -27,7 +27,7 @@
 		.divTableCell, .divTableHead {
 			border: 0px;
 			display: table-cell;
-			padding: 3px 10px;
+			padding: 3px 0px;
 		}
 
 		.divTableHeading {
@@ -49,12 +49,29 @@
 		.divTableDet {
 			display: table;
 			width: 100%;
+			font-family: Arial;
+			font-size: 8px;
+			border-top: 1px solid #999999;
+			border-left: 1px solid #999999;
+		}
+
+		.divTableDet1 {
+			display: table;
+			width: 100%;
+			font-family: Arial;
+			font-size: 8px;
+			border-left: 1px solid #999999;
+		}
+
+		.divTableDet2 {
+			background-color: #d0d0d0;
 		}
 
 		.divTableCellDet, .divTableHead {
-			border: 1px solid #999999;
+			border-bottom: 1px solid #999999;
+			border-right: 1px solid #999999;
 			display: table-cell;
-			padding: 3px 10px;
+			padding: 3px 0px;
 		}
 
 		.divTableRowDet {
@@ -63,21 +80,52 @@
 
 		.divTableBodyDet {
 			display: table-row-group;
-			font-size: 10px;
+			font-size: 7px;
 			font-family: Arial;
 		}
 
+			.divTableBodyDet .divTableCellDet {
+				padding: 3px 3px;
+			}
+
 		.divTableCellDet {
 			width: 70px;
+			font-size: 8px;
 		}
 
 		.divTableCellDescripcion {
 			width: 150px;
+			font-size: 7px;
+			font-family: Arial;
 		}
+
+		.divTableCellDescripcion2 {
+			width: 150px;
+			font-size: 8px !important;
+			font-family: Arial;
+			font-weight: bolder;
+			text-decoration: underline;
+		}
+
+		.bolder {
+			font-weight: bolder;
+		}
+
+        .alignRight {
+            text-align: right;
+        }
+
+        .alignCenter {
+            text-align: center;
+        }
+
+        .border-bottom-0 {
+            border-bottom: 0px !important;
+        }
 	</style>
 </head>
-<body style="max-width:2500px; margin:auto; font-family:Arial">
-	<p class="placa" style="margin: 0;padding: 10px 15px 20px 15px;text-align: left;font-size: 10px;color: #201751;font-weight:bolder">
+<body style="max-width: 2500px; margin: 10px; font-family: Arial">
+	<p class="placa" style="margin: 0; padding: 0px 0px 2px 0px; text-align: left; font-size: 9.5px; color: #201751; font-weight: bolder">
 		RATIOS FINANCIEROS
 	</p>
 	<div class="divTable" style="width: 100%;">
@@ -117,31 +165,31 @@
 					<div class="divTableCellDetx">&nbsp;FECHA:</div>
 				</div>
 				<div class="divTableCellDet">
-					<div class="divTableCellDetx">&nbsp;[Descripcion1]</div>
+					<div class="divTableCellDetx bolder">&nbsp;[Descripcion1]</div>
 					<div class="divTableCellDetx">&nbsp;[Estado1]</div>
 					<div class="divTableCellDetx">&nbsp;[FecPeriodo1]</div>
 				</div>
 				<div class="divTableCellDet">
-					<div class="divTableCellDetx">&nbsp;[Descripcion2]</div>
+					<div class="divTableCellDetx bolder">&nbsp;[Descripcion2]</div>
 					<div class="divTableCellDetx">&nbsp;[Estado2]</div>
 					<div class="divTableCellDetx">&nbsp;[FecPeriodo2]</div>
 				</div>
 				<div class="divTableCellDet">
-					<div class="divTableCellDetx">&nbsp;[Descripcion3]</div>
+					<div class="divTableCellDetx bolder">&nbsp;[Descripcion3]</div>
 					<div class="divTableCellDetx">&nbsp;[Estado3]</div>
 					<div class="divTableCellDetx">&nbsp;[FecPeriodo3]</div>
 				</div>
 				<div class="divTableCellDet">
-					<div class="divTableCellDetx">&nbsp;[Descripcion4]</div>
+					<div class="divTableCellDetx bolder">&nbsp;[Descripcion4]</div>
 					<div class="divTableCellDetx">&nbsp;[Estado4]</div>
 					<div class="divTableCellDetx">&nbsp;[FecPeriodo4]</div>
 				</div>
 				<div class="divTableCellDet">
-					<div class="divTableCellDetx">&nbsp;[Descripcion5]</div>
+					<div class="divTableCellDetx bolder">&nbsp;[Descripcion5]</div>
 					<div class="divTableCellDetx">&nbsp;[Estado5]</div>
 					<div class="divTableCellDetx">&nbsp;[FecPeriodo5]</div>
 				</div>
-				<div class="divTableCellDet">
+				<div class="divTableCellDet bolder alignCenter">
 					<div class="divTableCellDetx">&nbsp;ULTIMOS</div>
 					<div class="divTableCellDetx">&nbsp;12</div>
 					<div class="divTableCellDetx">&nbsp;MESES</div>

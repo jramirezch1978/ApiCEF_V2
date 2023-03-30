@@ -20,7 +20,7 @@ namespace Intercorp.CEFReports.Services.Controllers
             _proyeccionApplication = proyeccionApplication;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> ObtenerProyeccion(ProyeccionRequestDTO requestDTO)
         {
             if (requestDTO == null)
@@ -31,7 +31,7 @@ namespace Intercorp.CEFReports.Services.Controllers
             return BadRequest(response.Message);
 
         }
-        [HttpGet("slip/pdf")]
+        [HttpPost("slip/pdf")]
         public async Task<IActionResult> ObtenerProyeccionPDF(ProyeccionRequestDTO requestDTO)
         {
             if (requestDTO == null)

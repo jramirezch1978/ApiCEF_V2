@@ -19,7 +19,7 @@ namespace Intercorp.CEFReports.Services.Controllers
             _balanceGeneralApplication = balanceGeneralApplication;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> ObtenerBalanceGeneral(CuentaAnalisisRequestDTO requestDTO)
         {
             if (requestDTO == null)
@@ -31,7 +31,7 @@ namespace Intercorp.CEFReports.Services.Controllers
 
         }
 
-        [HttpGet("slip/pdf")]
+        [HttpPost("slip/pdf")]
         public async Task<IActionResult> ObtenerBalanceGeneralPDF(CuentaAnalisisRequestDTO requestDTO)
         {
             if (requestDTO == null)

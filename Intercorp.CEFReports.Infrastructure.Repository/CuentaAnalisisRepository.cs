@@ -53,12 +53,12 @@ namespace Intercorp.CEFReports.Infrastructure.Repository
         {
             using (var connection = _connectionFactory.GetIBCefSqlConnection)
             {
-                var query = "up_RPT_CEF_Metodizado_bckup2";
+                var query = "up_RPT_CEF_Metodizado";
                 var parameters = new DynamicParameters();
                 parameters.Add("@argCodMetodizado", codMetodizado);
                 parameters.Add("@argMetodizadoXML", metodizadoXml);
-                parameters.Add("@argCodAnalisis", CodAnalisis);
-                parameters.Add("@argCodEEFF", CodEEF);
+                //parameters.Add("@argCodAnalisis", CodAnalisis);
+                //parameters.Add("@argCodEEFF", CodEEF);
                 var result = await connection.QueryAsync<CuentaAnalisisDetalle>(query, param: parameters, commandTimeout:0,
                     commandType: System.Data.CommandType.StoredProcedure);
                 return result;

@@ -19,7 +19,7 @@ namespace Intercorp.CEFReports.Services.Controllers
             _estadoGananciaPerdidaApplication = estadoGananciaPerdidaApplication;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> ObtenerEstadoGananciaPerdida(CuentaAnalisisRequestDTO requestDTO)
         {
             if (requestDTO == null)
@@ -31,7 +31,7 @@ namespace Intercorp.CEFReports.Services.Controllers
 
         }
 
-        [HttpGet("slip/pdf")]
+        [HttpPost("slip/pdf")]
         public async Task<IActionResult> ObtenerEstadoGananciaPerdidaPDF(CuentaAnalisisRequestDTO requestDTO)
         {
             if (requestDTO == null)

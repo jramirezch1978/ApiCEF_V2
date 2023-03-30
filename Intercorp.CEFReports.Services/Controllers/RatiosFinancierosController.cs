@@ -19,7 +19,7 @@ namespace Intercorp.CEFReports.Services.Controllers
             _ratiosFinancierospplication = ratiosFinancierosApplication;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> ObtenerRatiosFinancieros(CuentaAnalisisRequestDTO requestDTO)
         {
             if (requestDTO == null)
@@ -31,7 +31,7 @@ namespace Intercorp.CEFReports.Services.Controllers
 
         }
 
-        [HttpGet("slip/pdf")]
+        [HttpPost("slip/pdf")]
         public async Task<IActionResult> ObtenerRatiosFinancierosPDF(CuentaAnalisisRequestDTO requestDTO)
         {
             if (requestDTO == null)

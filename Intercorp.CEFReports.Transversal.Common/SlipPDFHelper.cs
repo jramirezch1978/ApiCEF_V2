@@ -38,25 +38,48 @@ namespace Intercorp.CEFReports.Transversal.Common
             var resultado = Math.Round(valor, decimales, MidpointRounding.AwayFromZero);
             return resultado;
         }
+
         public byte[] GenerarSLIP(object slip, string htmlTemplate)
         {
             var sPDFPath = GetHtmlTemplatePath(htmlTemplate);
+            string pdf_orientation = String.Empty;
+            switch (htmlTemplate) 
+            {
+                case "BalanceGeneral":
+                    pdf_orientation = "Landscape";
+                    break;
+                case "EstadoGananciaPerdida":
+                    pdf_orientation = "Landscape";
+                    break;
+                case "Proyeccion":
+                    pdf_orientation = "Landscape";
+                    break;
+                default:
+                    pdf_orientation = "Portrait";
+                    break;
+            }
             byte[] retorno;
             string readText = string.Empty;
             try
             {
                 string htmlStringSlip = GeneracionHtmlSlip(slip, htmlTemplate);
                 HtmlToPdf converter = new HtmlToPdf();
+
+                int webPageWidth = 1024;
+                PdfPageOrientation pdfOrientation = (PdfPageOrientation)Enum.Parse(typeof(PdfPageOrientation),pdf_orientation, true);
                 converter.Options.PdfPageSize = PdfPageSize.A4;
-                converter.Options.PdfPageCustomSize = new SizeF { Width = 550, Height = 800 };
-                converter.Options.PdfPageOrientation = (PdfPageOrientation)Enum.Parse(typeof(PdfPageOrientation), "Portrait", true);
-                converter.Options.WebPageWidth = 800;
+                //converter.Options.PdfPageCustomSize = new SizeF { Width = 550, Height = 800 };
+                converter.Options.PdfPageOrientation = pdfOrientation;
+                converter.Options.WebPageWidth = webPageWidth;
                 converter.Options.WebPageHeight = 700;
+                converter.Options.MarginLeft = 10;
+                converter.Options.MarginRight = 10;
+                converter.Options.MarginTop = 20;
+                converter.Options.MarginBottom = 20;
 
                 var doc1 = converter.ConvertHtmlString(htmlStringSlip, sPDFPath);
                 PdfDocument doc = new PdfDocument();
                 doc.Append(doc1);
-
 
                 retorno = doc.Save();
             }
@@ -189,7 +212,10 @@ namespace Intercorp.CEFReports.Transversal.Common
             stringHtml = stringHtml.Replace("[EstadoFinanciero4]", NullToString(proyeccion.ESTADOFINANCIERO4));
             stringHtml = stringHtml.Replace("[Estado4]", NullToString(proyeccion.ESTADO4));
             stringHtml = stringHtml.Replace("[Fecha4]", NullToString(proyeccion.FECHA4));
-            stringHtml = stringHtml.Replace("[ivar1]", Left(proyeccion.TIPOPER2, 1) + Right(proyeccion.FECHA2, 2) + " / " + Left(proyeccion.TIPOPER1, 1) + Right(proyeccion.FECHA1, 2));
+            stringHtml = stringHtml.Replace("[Varc1]", Left(proyeccion.TIPOPER2, 1) + Right(proyeccion.FECHA2, 2) + " / " + Left(proyeccion.TIPOPER1, 1) + Right(proyeccion.FECHA1, 2));
+            stringHtml = stringHtml.Replace("[Varc2]", Left(proyeccion.TIPOPER3, 1) + Right(proyeccion.FECHA3, 2) + " / " + Left(proyeccion.TIPOPER2, 1) + Right(proyeccion.FECHA2, 2));
+            stringHtml = stringHtml.Replace("[Varc3]", Left(proyeccion.TIPOPER4, 1) + Right(proyeccion.FECHA4, 2) + " / " + Left(proyeccion.TIPOPER3, 1) + Right(proyeccion.FECHA3, 2));
+
 
             return stringHtml;
         }
@@ -202,17 +228,35 @@ namespace Intercorp.CEFReports.Transversal.Common
             {
                 stringHtml = readText;
                 stringHtml = stringHtml.Replace("[Descripcion]", item.DESCRIPCION.ToString());
-                stringHtml = stringHtml.Replace("[Real1]", item.REAL1.ToString());
-                stringHtml = stringHtml.Replace("[Vard1]", item.VAR1.ToString());
-                stringHtml = stringHtml.Replace("[Proy1]", item.PROY1.ToString());
-                stringHtml = stringHtml.Replace("[Vard2]", item.VAR2.ToString());
-                stringHtml = stringHtml.Replace("[Real2]", item.REAL2.ToString());
-                stringHtml = stringHtml.Replace("[Vard3]", item.VAR3.ToString());
-                stringHtml = stringHtml.Replace("[Proy2]", item.PROY2.ToString());
-                stringHtml = stringHtml.Replace("[Vard4]", item.VAR4.ToString());
-                stringHtml = stringHtml.Replace("[Vara1]", item.VARA1.ToString());
-                stringHtml = stringHtml.Replace("[Vara2]", item.VARA2.ToString());
-                stringHtml = stringHtml.Replace("[Vara3]", item.VARA3.ToString());
+
+                stringHtml = stringHtml.Replace("[Vard1]", !(item.VAR1 == 0) ? (!(Math.Round(item.VAR1, 1) == 0) ? Math.Round(item.VAR1, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Vard2]", !(item.VAR2 == 0) ? (!(Math.Round(item.VAR2, 1) == 0) ? Math.Round(item.VAR2, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Vard3]", !(item.VAR3 == 0) ? (!(Math.Round(item.VAR2, 1) == 0) ? Math.Round(item.VAR2, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Vard4]", !(item.VAR4 == 0) ? (!(Math.Round(item.VAR4, 1) == 0) ? Math.Round(item.VAR4, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+
+                stringHtml = stringHtml.Replace("[Proy1]", !(item.PROY1 == 0) ? (!(Math.Round(item.PROY1, 1) == 0) ? Math.Round(item.PROY1, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Proy2]", !(item.PROY2 == 0) ? (!(Math.Round(item.PROY2, 1) == 0) ? Math.Round(item.PROY2, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+
+
+                stringHtml = stringHtml.Replace("[Vara1]", !(item.VARA1 == 0) ? (!(Math.Round(item.VARA1, 1) == 0) ? Math.Round(item.VARA1, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Vara2]", !(item.VARA2 == 0) ? (!(Math.Round(item.VARA2, 1) == 0) ? Math.Round(item.VARA2, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Vara3]", !(item.VARA3 == 0) ? (!(Math.Round(item.VARA3, 1) == 0) ? Math.Round(item.VARA3, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+
+
+                if (item.CODCUENTA == 5100)
+                {
+                    stringHtml = stringHtml.Replace("[Real1]", "(" + Math.Abs(Math.Round(item.REAL1, 0)).ToString("#,##0") + ")");
+                    stringHtml = stringHtml.Replace("[Real2]", "(" + Math.Abs(Math.Round(item.REAL2, 0)).ToString("#,##0") + ")");
+                }
+                else {
+                    stringHtml = stringHtml.Replace("[Real1]", Math.Round(item.REAL1, 0).ToString("#,##0"));
+                    stringHtml = stringHtml.Replace("[Real2]", Math.Round(item.REAL2, 0).ToString("#,##0"));
+                }
+
+                if (item.CODCUENTA == 4800 || item.CODCUENTA == 5100) {
+                    stringHtml = stringHtml.Replace("[css1]", "divTableDet2 bolder");
+
+                }
 
                 data.Append(stringHtml);
             }
@@ -273,9 +317,17 @@ namespace Intercorp.CEFReports.Transversal.Common
             {
                 stringHtml = readText;
                 stringHtml = stringHtml.Replace("[Descripcion]", item.Descripcion.ToString());
-                stringHtml = stringHtml.Replace("[Importe2]", item.Importe2.ToString());
-                stringHtml = stringHtml.Replace("[Importe3]", item.Importe3.ToString());
-                stringHtml = stringHtml.Replace("[Importe5]", item.Importe5.ToString());
+                stringHtml = stringHtml.Replace("[Importe2]", string.Empty);
+
+                //stringHtml = stringHtml.Replace("[Importe2]", !(item.Importe2 == 0) ? (!(Math.Round(item.Importe2, 1) == 0) ? Math.Round(item.Importe2, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe3]", Math.Round(item.Importe3, 0).ToString("#,##0") );
+                stringHtml = stringHtml.Replace("[Importe4]", !(item.Importe4 == 0) ? (!(Math.Round(item.Importe4, 1) == 0) ? Math.Round(item.Importe4, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe5]", !(item.Importe5 == 0) ? (!(Math.Round(item.Importe5, 1) == 0) ? Math.Round(item.Importe5, 0).ToString("#,##0") : string.Empty) : string.Empty);
+
+                if (item.CodTipoCuenta == 4)
+                {
+                    stringHtml = stringHtml.Replace("[css1]", "divTableDet2 bolder");
+                }
 
                 data.Append(stringHtml);
             }
@@ -336,9 +388,17 @@ namespace Intercorp.CEFReports.Transversal.Common
             {
                 stringHtml = readText;
                 stringHtml = stringHtml.Replace("[Descripcion]", item.Descripcion.ToString());
-                stringHtml = stringHtml.Replace("[Importe2]", item.Importe2.ToString());
-                stringHtml = stringHtml.Replace("[Importe3]", item.Importe3.ToString());
-                stringHtml = stringHtml.Replace("[Importe5]", item.Importe5.ToString());
+                stringHtml = stringHtml.Replace("[Importe2]", string.Empty);
+
+                //stringHtml = stringHtml.Replace("[Importe2]", !(item.Importe2 == 0) ? (!(Math.Round(item.Importe2, 1) == 0) ? Math.Round(item.Importe2, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe3]", Math.Round(item.Importe3, 0).ToString("#,##0"));
+                stringHtml = stringHtml.Replace("[Importe4]", !(item.Importe4 == 0) ? Math.Round(item.Importe4, 0).ToString("#,##0") : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe5]", !(item.Importe5 == 0) ? (!(Math.Round(item.Importe5, 1) == 0) ? Math.Round(item.Importe5, 0).ToString("#,##0") : string.Empty) : string.Empty);
+
+                if (item.CodTipoCuenta == 4)
+                {
+                    stringHtml = stringHtml.Replace("[css1]", "divTableDet2 bolder");
+                }
 
                 data.Append(stringHtml);
             }
@@ -384,6 +444,13 @@ namespace Intercorp.CEFReports.Transversal.Common
             stringHtml = stringHtml.Replace("[Descripcion5]", NullToString(cuentaAnalisis.Descripcion5));
             stringHtml = stringHtml.Replace("[Estado5]", NullToString(cuentaAnalisis.Estado5));
 
+            stringHtml = stringHtml.Replace("[FecPeriodo1]", NullToString(cuentaAnalisis.FecPeriodo1));
+            stringHtml = stringHtml.Replace("[FecPeriodo2]", NullToString(cuentaAnalisis.FecPeriodo2));
+            stringHtml = stringHtml.Replace("[FecPeriodo3]", NullToString(cuentaAnalisis.FecPeriodo3));
+            stringHtml = stringHtml.Replace("[FecPeriodo4]", NullToString(cuentaAnalisis.FecPeriodo4));
+            stringHtml = stringHtml.Replace("[FecPeriodo5]", NullToString(cuentaAnalisis.FecPeriodo5));
+
+
             return stringHtml;
         }
         private string GetHtmlFuentesUsosFondosxMonedaDetalle(List<CuentaAnalisisDetalle> lstCuentaAnalisis, string readText)
@@ -408,22 +475,41 @@ namespace Intercorp.CEFReports.Transversal.Common
                     stringHtml = stringHtml.Replace("[Dolares4]", String.Empty);
                     stringHtml = stringHtml.Replace("[Dolares5]", String.Empty);
 
-                    stringHtml = stringHtml.Replace("[css1]", "divTableCellDetString1");
-                    stringHtml = stringHtml.Replace("[css2]", "divTableCellDetString2");
+                    stringHtml = stringHtml.Replace("[css1]", "border-down border-top");
+                    stringHtml = stringHtml.Replace("[css2]", "width-100");
+                    stringHtml = stringHtml.Replace("[css3]", "width-0");
+                }
+                else if(item.CodCuentaAnalisis == 301 || item.CodCuentaAnalisis == 303)
+                {
+                    stringHtml = stringHtml.Replace("[Soles2]", !(item.Soles2 == 0) ? (!(Math.Round(item.Soles2, 2) == 0) ? Math.Round(item.Soles2, 2).ToString("#,##0.00") : string.Empty) : string.Empty);
+                    stringHtml = stringHtml.Replace("[Soles3]", !(item.Soles3 == 0) ? (!(Math.Round(item.Soles3, 2) == 0) ? Math.Round(item.Soles3, 2).ToString("#,##0.00") : string.Empty) : string.Empty);
+                    stringHtml = stringHtml.Replace("[Soles4]", !(item.Soles4 == 0) ? (!(Math.Round(item.Soles4, 2) == 0) ? Math.Round(item.Soles4, 2).ToString("#,##0.00") : string.Empty) : string.Empty);
+                    stringHtml = stringHtml.Replace("[Soles5]", !(item.Soles5 == 0) ? (!(Math.Round(item.Soles5, 2) == 0) ? Math.Round(item.Soles5, 2).ToString("#,##0.00") : string.Empty) : string.Empty);
+
+                    stringHtml = stringHtml.Replace("[Dolares2]", !(item.Dolares2 == 0) ? (!(Math.Round(item.Dolares2, 2) == 0) ? Math.Round(item.Dolares2, 2).ToString("#,##0.00") : string.Empty) : string.Empty);
+                    stringHtml = stringHtml.Replace("[Dolares3]", !(item.Dolares3 == 0) ? (!(Math.Round(item.Dolares3, 2) == 0) ? Math.Round(item.Dolares3, 2).ToString("#,##0.00") : string.Empty) : string.Empty);
+                    stringHtml = stringHtml.Replace("[Dolares4]", !(item.Dolares4 == 0) ? (!(Math.Round(item.Dolares4, 2) == 0) ? Math.Round(item.Dolares4, 2).ToString("#,##0.00") : string.Empty) : string.Empty);
+                    stringHtml = stringHtml.Replace("[Dolares5]", !(item.Dolares5 == 0) ? (!(Math.Round(item.Dolares5,2) == 0) ? Math.Round(item.Dolares5, 2).ToString("#,##0.00") : string.Empty) : string.Empty);
+
                 }
                 else {
-                    stringHtml = stringHtml.Replace("[Soles2]", item.Soles2.ToString());
-                    stringHtml = stringHtml.Replace("[Soles3]", item.Soles3.ToString());
-                    stringHtml = stringHtml.Replace("[Soles4]", item.Soles4.ToString());
-                    stringHtml = stringHtml.Replace("[Soles5]", item.Soles5.ToString());
+                    stringHtml = stringHtml.Replace("[Soles2]", !(item.Soles2 == 0) ? (!(Math.Round(item.Soles2, 1) == 0) ? Math.Round(item.Soles2, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                    stringHtml = stringHtml.Replace("[Soles3]", !(item.Soles3 == 0) ? (!(Math.Round(item.Soles3, 1) == 0) ? Math.Round(item.Soles3, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                    stringHtml = stringHtml.Replace("[Soles4]", !(item.Soles4 == 0) ? (!(Math.Round(item.Soles4, 1) == 0) ? Math.Round(item.Soles4, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                    stringHtml = stringHtml.Replace("[Soles5]", !(item.Soles5 == 0) ? (!(Math.Round(item.Soles5, 1) == 0) ? Math.Round(item.Soles5, 0).ToString("#,##0") : string.Empty) : string.Empty);
 
-                    stringHtml = stringHtml.Replace("[Dolares2]", item.Dolares2.ToString());
-                    stringHtml = stringHtml.Replace("[Dolares3]", item.Dolares3.ToString());
-                    stringHtml = stringHtml.Replace("[Dolares4]", item.Dolares4.ToString());
+                    stringHtml = stringHtml.Replace("[Dolares2]", !(item.Dolares2 == 0) ? (!(Math.Round(item.Dolares2, 1) == 0) ? Math.Round(item.Dolares2, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                    stringHtml = stringHtml.Replace("[Dolares3]", !(item.Dolares3 == 0) ? (!(Math.Round(item.Dolares3, 1) == 0) ? Math.Round(item.Dolares3, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                    stringHtml = stringHtml.Replace("[Dolares4]", !(item.Dolares4 == 0) ? (!(Math.Round(item.Dolares4, 1) == 0) ? Math.Round(item.Dolares4, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                    stringHtml = stringHtml.Replace("[Dolares5]", !(item.Dolares5 == 0) ? (!(Math.Round(item.Dolares5, 1) == 0) ? Math.Round(item.Dolares5, 0).ToString("#,##0") : string.Empty) : string.Empty);
 
-                    stringHtml = stringHtml.Replace("[Dolares5]", "divTableCellDetString");
                 }
-                
+
+                if (item.CodTipoCuenta == 4)
+                {
+                    stringHtml = stringHtml.Replace("[css1]", "divTableDet2 bolder");
+                }
+
 
                 data.Append(stringHtml);
             }
@@ -484,9 +570,16 @@ namespace Intercorp.CEFReports.Transversal.Common
             {
                 stringHtml = readText;
                 stringHtml = stringHtml.Replace("[Descripcion]", item.Descripcion.ToString());
-                stringHtml = stringHtml.Replace("[Importe2]", item.Importe2.ToString());
-                stringHtml = stringHtml.Replace("[Importe3]", item.Importe3.ToString());
-                stringHtml = stringHtml.Replace("[Importe5]", item.Importe5.ToString());
+
+                stringHtml = stringHtml.Replace("[Importe2]", !(item.Importe2 == 0) ? (!(Math.Round(item.Importe2, 1) == 0) ? Math.Round(item.Importe2, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe3]", !(item.Importe3 == 0) ? (!(Math.Round(item.Importe3, 1) == 0) ? Math.Round(item.Importe3, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe4]", !(item.Importe4 == 0) ? (!(Math.Round(item.Importe4, 1) == 0) ? Math.Round(item.Importe4, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe5]", !(item.Importe5 == 0) ? (!(Math.Round(item.Importe5, 1) == 0) ? Math.Round(item.Importe5, 0).ToString("#,##0") : string.Empty) : string.Empty);
+
+                if (item.CodTipoCuenta == 4)
+                {
+                    stringHtml = stringHtml.Replace("[css1]", "divTableDet2 bolder");
+                }
 
                 data.Append(stringHtml);
             }
@@ -547,7 +640,43 @@ namespace Intercorp.CEFReports.Transversal.Common
             string stringHtml = string.Empty;
             var data = new StringBuilder();
 
-            foreach (CuentaAnalisisDetalle item in lstCuentaAnalisis.FindAll(x => (x.CodAnalisis == 99 && x.CodEEFF == 99) || (x.CodAnalisis == 3 && x.CodEEFF == 9 && x.CodCuentaAnalisis == 423)))
+            foreach (CuentaAnalisisDetalle item in lstCuentaAnalisis.FindAll(x => (x.CodAnalisis == 99 && x.CodEEFF == 99) ))
+            {
+                stringHtml = readText;
+                if (item.CodTipoCuenta != 1)
+                {
+                    stringHtml = stringHtml.Replace("[Descripcion]", item.Descripcion.ToString());
+                    stringHtml = stringHtml.Replace("[Porcentaje1]", item.Porcentaje1.ToString());
+                    stringHtml = stringHtml.Replace("[Porcentaje2]", item.Porcentaje2.ToString());
+                    stringHtml = stringHtml.Replace("[Porcentaje3]", item.Porcentaje3.ToString());
+                    stringHtml = stringHtml.Replace("[Porcentaje4]", item.Porcentaje4.ToString());
+                    stringHtml = stringHtml.Replace("[Porcentaje5]", item.Porcentaje5.ToString());
+                    stringHtml = stringHtml.Replace("[PUltimos12]", item.PUltimos12.ToString());
+                    stringHtml = stringHtml.Replace("[css2]", "divTableCellDescripcion");
+                }
+                else {
+
+                    stringHtml = stringHtml.Replace("[Descripcion]", item.Descripcion.ToString());
+                    stringHtml = stringHtml.Replace("[Porcentaje1]", String.Empty);
+                    stringHtml = stringHtml.Replace("[Porcentaje2]", String.Empty);
+                    stringHtml = stringHtml.Replace("[Porcentaje3]", String.Empty);
+                    stringHtml = stringHtml.Replace("[Porcentaje4]", String.Empty);
+                    stringHtml = stringHtml.Replace("[Porcentaje5]", String.Empty);
+                    stringHtml = stringHtml.Replace("[PUltimos12]", String.Empty);
+                    stringHtml = stringHtml.Replace("[css1]", "divTableDet2");
+                    stringHtml = stringHtml.Replace("[css2]", "divTableCellDescripcion2");
+                }
+
+                if (item.CodCuentaAnalisis != 9005 && item.CodCuentaAnalisis != 9015 && item.CodCuentaAnalisis != 9021 && item.CodCuentaAnalisis != 9026 && item.CodCuentaAnalisis != 9029)
+                {
+                    stringHtml = stringHtml.Replace("[css3]", "border-bottom-0");
+                }
+                
+
+
+                data.Append(stringHtml);
+            }
+            foreach (CuentaAnalisisDetalle item in lstCuentaAnalisis.FindAll(x => (x.CodAnalisis == 3 && x.CodEEFF == 9 && x.CodCuentaAnalisis == 423)))
             {
                 stringHtml = readText;
                 stringHtml = stringHtml.Replace("[Descripcion]", item.Descripcion.ToString());
@@ -557,9 +686,10 @@ namespace Intercorp.CEFReports.Transversal.Common
                 stringHtml = stringHtml.Replace("[Porcentaje4]", item.Porcentaje4.ToString());
                 stringHtml = stringHtml.Replace("[Porcentaje5]", item.Porcentaje5.ToString());
                 stringHtml = stringHtml.Replace("[PUltimos12]", item.PUltimos12.ToString());
-
+                stringHtml = stringHtml.Replace("[css2]", "divTableCellDescripcion");
                 data.Append(stringHtml);
             }
+
 
             return data.ToString();
         }
@@ -611,10 +741,11 @@ namespace Intercorp.CEFReports.Transversal.Common
             stringHtml = stringHtml.Replace("[Estado5]", NullToString(cuentaAnalisis.Estado5));
             stringHtml = stringHtml.Replace("[FecPeriodo5]", NullToString(cuentaAnalisis.FecPeriodo5));
 
-            stringHtml = stringHtml.Replace("[TVar2]", NullToString(cuentaAnalisis.FecPeriodo2));
-            stringHtml = stringHtml.Replace("[TVar3]", NullToString(cuentaAnalisis.FecPeriodo3));
-            stringHtml = stringHtml.Replace("[TVar4]", NullToString(cuentaAnalisis.FecPeriodo4));
-            stringHtml = stringHtml.Replace("[TVar5]", NullToString(cuentaAnalisis.FecPeriodo5));
+            stringHtml = stringHtml.Replace("[TVar2]", string.IsNullOrEmpty(cuentaAnalisis.FecPeriodo1) || string.IsNullOrEmpty(cuentaAnalisis.FecPeriodo2) ? string.Empty :
+                NullToString(Right(cuentaAnalisis.FecPeriodo2, 2) + "-" + Right(cuentaAnalisis.FecPeriodo1, 2)));
+            stringHtml = stringHtml.Replace("[TVar3]", NullToString(Right(cuentaAnalisis.FecPeriodo3, 2) + "-" + Right(cuentaAnalisis.FecPeriodo2, 2)));
+            stringHtml = stringHtml.Replace("[TVar4]", NullToString(Right(cuentaAnalisis.FecPeriodo5, 2) + "-" + Right(cuentaAnalisis.FecPeriodo3, 2)));
+            stringHtml = stringHtml.Replace("[TVar5]", NullToString(Right(cuentaAnalisis.FecPeriodo5, 2) + "-" + Right(cuentaAnalisis.FecPeriodo5, 2)));
 
             return stringHtml;
         }
@@ -626,54 +757,72 @@ namespace Intercorp.CEFReports.Transversal.Common
             foreach (CuentaAnalisisDetalle item in lstCuentaAnalisis.FindAll(x => x.CodAnalisis == 2 && x.CodEEFF == 1))
             {
                 stringHtml = readText;
-                stringHtml = stringHtml.Replace("[Descripcion]", item.Descripcion.ToString());
-                stringHtml = stringHtml.Replace("[TieneNota]", item.TieneNota.ToString());
+                stringHtml = stringHtml.Replace("[Descripcion]", NullToString(item.Descripcion));
+                stringHtml = stringHtml.Replace("[TieneNota]", !(item.TieneNota==0) ? item.TieneNota.ToString() : string.Empty);
 
-                stringHtml = stringHtml.Replace("[Importe1]", Math.Round(item.Importe1, 2).ToString());
-                stringHtml = stringHtml.Replace("[Importe2]", Math.Round(item.Importe2, 2).ToString());
-                stringHtml = stringHtml.Replace("[Importe3]", Math.Round(item.Importe3, 2).ToString());
-                stringHtml = stringHtml.Replace("[Importe4]", Math.Round(item.Importe4, 2).ToString());
-                stringHtml = stringHtml.Replace("[Importe5]", Math.Round(item.Importe5, 2).ToString());
+                stringHtml = stringHtml.Replace("[Importe1]", !(item.Importe1 == 0) ? (!(Math.Round(item.Importe1, 1)==0) ? Math.Round(item.Importe1, 0).ToString("#,##0") : string.Empty ): string.Empty );
+                stringHtml = stringHtml.Replace("[Importe2]", !(item.Importe2 == 0) ? (!(Math.Round(item.Importe2, 1)==0) ? Math.Round(item.Importe2, 0).ToString("#,##0") : string.Empty ): string.Empty );
+                stringHtml = stringHtml.Replace("[Importe3]", !(item.Importe3 == 0) ? (!(Math.Round(item.Importe3, 1)==0) ? Math.Round(item.Importe3, 0).ToString("#,##0") : string.Empty ): string.Empty );
+                stringHtml = stringHtml.Replace("[Importe4]", !(item.Importe4 == 0) ? (!(Math.Round(item.Importe4, 1)==0) ? Math.Round(item.Importe4, 0).ToString("#,##0") : string.Empty ): string.Empty );
+                stringHtml = stringHtml.Replace("[Importe5]", !(item.Importe5 == 0) ? (!(Math.Round(item.Importe5, 1)==0) ? Math.Round(item.Importe5, 0).ToString("#,##0") : string.Empty) : string.Empty );
 
-                stringHtml = stringHtml.Replace("[Porcentaje1]", Math.Round(item.Porcentaje1, 2).ToString());
-                stringHtml = stringHtml.Replace("[Porcentaje2]", Math.Round(item.Porcentaje2, 2).ToString());
-                stringHtml = stringHtml.Replace("[Porcentaje3]", Math.Round(item.Porcentaje3, 2).ToString());
-                stringHtml = stringHtml.Replace("[Porcentaje4]", Math.Round(item.Porcentaje4, 2).ToString());
-                stringHtml = stringHtml.Replace("[Porcentaje5]", Math.Round(item.Porcentaje5, 2).ToString());
 
-                stringHtml = stringHtml.Replace("[Var2]", Math.Round(item.Variacion2, 2).ToString());
-                stringHtml = stringHtml.Replace("[Var3]", Math.Round(item.Variacion3, 2).ToString());
-                stringHtml = stringHtml.Replace("[Var4]", Math.Round(item.Variacion4, 2).ToString());
-                stringHtml = stringHtml.Replace("[Var5]", Math.Round(item.Variacion5, 2).ToString());
+                stringHtml = stringHtml.Replace("[Porcentaje1]", !(item.Porcentaje1 == 0) ? (!(Math.Round(item.Porcentaje1, 1) == 0) ? Math.Round(item.Porcentaje1, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Porcentaje2]", !(item.Porcentaje2 == 0) ? (!(Math.Round(item.Porcentaje2, 1) == 0) ? Math.Round(item.Porcentaje2, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Porcentaje3]", !(item.Porcentaje3 == 0) ? (!(Math.Round(item.Porcentaje3, 1) == 0) ? Math.Round(item.Porcentaje3, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Porcentaje4]", !(item.Porcentaje4 == 0) ? (!(Math.Round(item.Porcentaje4, 1) == 0) ? Math.Round(item.Porcentaje4, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Porcentaje5]", !(item.Porcentaje5 == 0) ? (!(Math.Round(item.Porcentaje5, 1) == 0) ? Math.Round(item.Porcentaje5, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
 
-                stringHtml = stringHtml.Replace("[Cagr]", Math.Round(item.Cagr, 2).ToString());
+                stringHtml = stringHtml.Replace("[Var2]", !(item.Variacion2 == 0) ? (!(Math.Round(item.Variacion2, 1) == 0) ? Math.Round(item.Variacion2, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Var3]", !(item.Variacion3 == 0) ? (!(Math.Round(item.Variacion3, 1) == 0) ? Math.Round(item.Variacion3, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Var4]", !(item.Variacion4 == 0) ? (!(Math.Round(item.Variacion4, 1) == 0) ? Math.Round(item.Variacion4, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Var5]", !(item.Variacion5 == 0) ? (!(Math.Round(item.Variacion5, 1) == 0) ? Math.Round(item.Variacion5, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+
+                stringHtml = stringHtml.Replace("[Cagr]", !(item.Cagr == 0) ? (!(Math.Round(item.Cagr, 1) == 0) ? Math.Round(item.Cagr, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+
+                if (item.CodTipoCuenta == 4)
+                {
+                    stringHtml = stringHtml.Replace("[css1]", "divTableDet2 bolder");
+                }
 
                 data.Append(stringHtml);
             }
             foreach (CuentaAnalisisDetalle item in lstCuentaAnalisis.FindAll(x => x.CodAnalisis == 1 && x.CodEEFF == 3))
             {
                 stringHtml = readText;
-                stringHtml = stringHtml.Replace("[Descripcion]", item.Descripcion.ToString());
-                stringHtml = stringHtml.Replace("[TieneNota]", item.TieneNota.ToString());
+                stringHtml = stringHtml.Replace("[Descripcion]", !string.IsNullOrEmpty(item.Descripcion) ? item.Descripcion.ToString() : string.Empty);
+                stringHtml = stringHtml.Replace("[TieneNota]", !(item.TieneNota == 0) ? item.TieneNota.ToString() : string.Empty);
 
-                stringHtml = stringHtml.Replace("[Importe1]", Math.Round(item.Importe1, 2).ToString());
-                stringHtml = stringHtml.Replace("[Importe2]", Math.Round(item.Importe2, 2).ToString());
-                stringHtml = stringHtml.Replace("[Importe3]", Math.Round(item.Importe3, 2).ToString());
-                stringHtml = stringHtml.Replace("[Importe4]", Math.Round(item.Importe4, 2).ToString());
-                stringHtml = stringHtml.Replace("[Importe5]", Math.Round(item.Importe5, 2).ToString());
+                stringHtml = stringHtml.Replace("[Importe1]", !(item.Importe1 == 0) ? (!(Math.Round(item.Importe1, 1) == 0) ? Math.Round(item.Importe1, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe2]", !(item.Importe2 == 0) ? (!(Math.Round(item.Importe2, 1) == 0) ? Math.Round(item.Importe2, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe3]", !(item.Importe3 == 0) ? (!(Math.Round(item.Importe3, 1) == 0) ? Math.Round(item.Importe3, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe4]", !(item.Importe4 == 0) ? (!(Math.Round(item.Importe4, 1) == 0) ? Math.Round(item.Importe4, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe5]", !(item.Importe5 == 0) ? (!(Math.Round(item.Importe5, 1) == 0) ? Math.Round(item.Importe5, 0).ToString("#,##0") : string.Empty) : string.Empty);
 
-                stringHtml = stringHtml.Replace("[Porcentaje1]", Math.Round(item.Porcentaje1, 2).ToString());
-                stringHtml = stringHtml.Replace("[Porcentaje2]", Math.Round(item.Porcentaje2, 2).ToString());
-                stringHtml = stringHtml.Replace("[Porcentaje3]", Math.Round(item.Porcentaje3, 2).ToString());
-                stringHtml = stringHtml.Replace("[Porcentaje4]", Math.Round(item.Porcentaje4, 2).ToString());
-                stringHtml = stringHtml.Replace("[Porcentaje5]", Math.Round(item.Porcentaje5, 2).ToString());
 
-                stringHtml = stringHtml.Replace("[Var2]", Math.Round(item.Variacion2, 2).ToString());
-                stringHtml = stringHtml.Replace("[Var3]", Math.Round(item.Variacion3, 2).ToString());
-                stringHtml = stringHtml.Replace("[Var4]", Math.Round(item.Variacion4, 2).ToString());
-                stringHtml = stringHtml.Replace("[Var5]", Math.Round(item.Variacion5, 2).ToString());
+                stringHtml = stringHtml.Replace("[Porcentaje1]", !(item.Porcentaje1 == 0) ? (!(Math.Round(item.Porcentaje1, 1) == 0) ? Math.Round(item.Porcentaje1, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Porcentaje2]", !(item.Porcentaje2 == 0) ? (!(Math.Round(item.Porcentaje2, 1) == 0) ? Math.Round(item.Porcentaje2, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Porcentaje3]", !(item.Porcentaje3 == 0) ? (!(Math.Round(item.Porcentaje3, 1) == 0) ? Math.Round(item.Porcentaje3, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Porcentaje4]", !(item.Porcentaje4 == 0) ? (!(Math.Round(item.Porcentaje4, 1) == 0) ? Math.Round(item.Porcentaje4, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Porcentaje5]", !(item.Porcentaje5 == 0) ? (!(Math.Round(item.Porcentaje5, 1) == 0) ? Math.Round(item.Porcentaje5, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
 
-                stringHtml = stringHtml.Replace("[Cagr]", Math.Round(item.Cagr, 2).ToString());
+                stringHtml = stringHtml.Replace("[Var2]", !(item.Variacion2 == 0) ? (!(Math.Round(item.Variacion2, 1) == 0) ? Math.Round(item.Variacion2, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Var3]", !(item.Variacion3 == 0) ? (!(Math.Round(item.Variacion3, 1) == 0) ? Math.Round(item.Variacion3, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Var4]", !(item.Variacion4 == 0) ? (!(Math.Round(item.Variacion4, 1) == 0) ? Math.Round(item.Variacion4, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Var5]", !(item.Variacion5 == 0) ? (!(Math.Round(item.Variacion5, 1) == 0) ? Math.Round(item.Variacion5, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+
+                stringHtml = stringHtml.Replace("[Cagr]", !(item.Cagr == 0) ? (!(Math.Round(item.Cagr, 1) == 0) ? Math.Round(item.Cagr, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+
+                if (item.CodCuentaAnalisis == 706)
+                {
+                    stringHtml = stringHtml.Replace("[css1]", "border-down");
+                }else if (item.CodCuentaAnalisis == 707)
+                {
+                    stringHtml = stringHtml.Replace("[css2]", "bolder underline border-0");
+                }
+                else {
+                    stringHtml = stringHtml.Replace("[css2]", "border-0");
+                }
 
                 data.Append(stringHtml);
             }
@@ -728,13 +877,14 @@ namespace Intercorp.CEFReports.Transversal.Common
             stringHtml = stringHtml.Replace("[Estado5]", NullToString(cuentaAnalisis.Estado5));
             stringHtml = stringHtml.Replace("[FecPeriodo5]", NullToString(cuentaAnalisis.FecPeriodo5));
 
-            stringHtml = stringHtml.Replace("[TVar2]", NullToString(cuentaAnalisis.FecPeriodo2));
-            stringHtml = stringHtml.Replace("[TVar3]", NullToString(cuentaAnalisis.FecPeriodo3));
-            stringHtml = stringHtml.Replace("[TVar4]", NullToString(cuentaAnalisis.FecPeriodo4));
-            stringHtml = stringHtml.Replace("[TVar5]", NullToString(cuentaAnalisis.FecPeriodo5));
-
             stringHtml = stringHtml.Replace("[TipoCambio]", NullToString(cuentaAnalisis.TipoCambio));
+            stringHtml = stringHtml.Replace("[NomUsuValida]", NullToString(cuentaAnalisis.NomUsuValida));
 
+            stringHtml = stringHtml.Replace("[TVar2]", string.IsNullOrEmpty(cuentaAnalisis.FecPeriodo1) || string.IsNullOrEmpty(cuentaAnalisis.FecPeriodo2) ? string.Empty :
+                NullToString(Right(cuentaAnalisis.FecPeriodo2, 2) + "-" + Right(cuentaAnalisis.FecPeriodo1, 2)));
+            stringHtml = stringHtml.Replace("[TVar3]", NullToString(Right(cuentaAnalisis.FecPeriodo3, 2) + "-" + Right(cuentaAnalisis.FecPeriodo2, 2)));
+            stringHtml = stringHtml.Replace("[TVar4]", NullToString(Right(cuentaAnalisis.FecPeriodo5, 2) + "-" + Right(cuentaAnalisis.FecPeriodo3, 2)));
+            stringHtml = stringHtml.Replace("[TVar5]", NullToString(Right(cuentaAnalisis.FecPeriodo5, 2) + "-" + Right(cuentaAnalisis.FecPeriodo5, 2)));
 
             return stringHtml;
         }
@@ -746,29 +896,38 @@ namespace Intercorp.CEFReports.Transversal.Common
             foreach (CuentaAnalisisDetalle item in lstCuentaAnalisis.FindAll(x => x.CodAnalisis == 2 && x.CodEEFF == 2))
             {
                 stringHtml = readText;
-                stringHtml = stringHtml.Replace("[Descripcion]", item.Descripcion.ToString());
-                stringHtml = stringHtml.Replace("[TieneNota]", item.TieneNota.ToString());
+                stringHtml = stringHtml.Replace("[Descripcion]", NullToString(item.Descripcion));
+                stringHtml = stringHtml.Replace("[TieneNota]", !(item.TieneNota == 0) ? item.TieneNota.ToString() : string.Empty);
 
-                stringHtml = stringHtml.Replace("[Importe1]", Math.Round(item.Importe1, 2).ToString());
-                stringHtml = stringHtml.Replace("[Importe2]", Math.Round(item.Importe2, 2).ToString());
-                stringHtml = stringHtml.Replace("[Importe3]", Math.Round(item.Importe3, 2).ToString());
-                stringHtml = stringHtml.Replace("[Importe4]", Math.Round(item.Importe4, 2).ToString());
-                stringHtml = stringHtml.Replace("[Importe5]", Math.Round(item.Importe5, 2).ToString());
+                stringHtml = stringHtml.Replace("[Importe1]", !(item.Importe1 == 0) ? (!(Math.Round(item.Importe1, 1) == 0) ? Math.Round(item.Importe1, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe2]", !(item.Importe2 == 0) ? (!(Math.Round(item.Importe2, 1) == 0) ? Math.Round(item.Importe2, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe3]", !(item.Importe3 == 0) ? (!(Math.Round(item.Importe3, 1) == 0) ? Math.Round(item.Importe3, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe4]", !(item.Importe4 == 0) ? (!(Math.Round(item.Importe4, 1) == 0) ? Math.Round(item.Importe4, 0).ToString("#,##0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Importe5]", !(item.Importe5 == 0) ? (!(Math.Round(item.Importe5, 1) == 0) ? Math.Round(item.Importe5, 0).ToString("#,##0") : string.Empty) : string.Empty);
 
-                stringHtml = stringHtml.Replace("[Porcentaje1]", Math.Round(item.Porcentaje1, 2).ToString());
-                stringHtml = stringHtml.Replace("[Porcentaje2]", Math.Round(item.Porcentaje2, 2).ToString());
-                stringHtml = stringHtml.Replace("[Porcentaje3]", Math.Round(item.Porcentaje3, 2).ToString());
-                stringHtml = stringHtml.Replace("[Porcentaje4]", Math.Round(item.Porcentaje4, 2).ToString());
-                stringHtml = stringHtml.Replace("[Porcentaje5]", Math.Round(item.Porcentaje5, 2).ToString());
 
-                stringHtml = stringHtml.Replace("[Var2]", Math.Round(item.Variacion2, 2).ToString());
-                stringHtml = stringHtml.Replace("[Var3]", Math.Round(item.Variacion3, 2).ToString());
-                stringHtml = stringHtml.Replace("[Var4]", Math.Round(item.Variacion4, 2).ToString());
-                stringHtml = stringHtml.Replace("[Var5]", Math.Round(item.Variacion5, 2).ToString());
+                stringHtml = stringHtml.Replace("[Porcentaje1]", !(item.Porcentaje1 == 0) ? (!(Math.Round(item.Porcentaje1, 1) == 0) ? Math.Round(item.Porcentaje1, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Porcentaje2]", !(item.Porcentaje2 == 0) ? (!(Math.Round(item.Porcentaje2, 1) == 0) ? Math.Round(item.Porcentaje2, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Porcentaje3]", !(item.Porcentaje3 == 0) ? (!(Math.Round(item.Porcentaje3, 1) == 0) ? Math.Round(item.Porcentaje3, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Porcentaje4]", !(item.Porcentaje4 == 0) ? (!(Math.Round(item.Porcentaje4, 1) == 0) ? Math.Round(item.Porcentaje4, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Porcentaje5]", !(item.Porcentaje5 == 0) ? (!(Math.Round(item.Porcentaje5, 1) == 0) ? Math.Round(item.Porcentaje5, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
 
-                stringHtml = stringHtml.Replace("[Cagr]", Math.Round(item.Cagr, 2).ToString());
-                stringHtml = stringHtml.Replace("[Ultimos12]", Math.Round(item.Ultimos12, 2).ToString());
-                stringHtml = stringHtml.Replace("[PUltimos12]", Math.Round(item.PUltimos12, 2).ToString());
+
+                stringHtml = stringHtml.Replace("[Var2]", !(item.Variacion2 == 0) ? (!(Math.Round(item.Variacion2, 1) == 0) ? Math.Round(item.Variacion2, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Var3]", !(item.Variacion3 == 0) ? (!(Math.Round(item.Variacion3, 1) == 0) ? Math.Round(item.Variacion3, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Var4]", !(item.Variacion4 == 0) ? (!(Math.Round(item.Variacion4, 1) == 0) ? Math.Round(item.Variacion4, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[Var5]", !(item.Variacion5 == 0) ? (!(Math.Round(item.Variacion5, 1) == 0) ? Math.Round(item.Variacion5, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+
+                stringHtml = stringHtml.Replace("[Cagr]", !(item.Cagr == 0) ? (!(Math.Round(item.Cagr, 1) == 0) ? Math.Round(item.Cagr, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+
+                stringHtml = stringHtml.Replace("[Ultimos12]", !(item.Ultimos12 == 0) ? (!(Math.Round(item.Ultimos12, 1) == 0) ? Math.Round(item.Ultimos12, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+                stringHtml = stringHtml.Replace("[PUltimos12]", !(item.PUltimos12 == 0) ? (!(Math.Round(item.PUltimos12, 1) == 0) ? Math.Round(item.PUltimos12, 1).ToString("#,##0.0") : string.Empty) : string.Empty);
+
+                if (item.CodTipoCuenta == 4)
+                {
+                    stringHtml = stringHtml.Replace("[css1]", "divTableDet2 bolder");
+                }
+
 
                 data.Append(stringHtml);
             }

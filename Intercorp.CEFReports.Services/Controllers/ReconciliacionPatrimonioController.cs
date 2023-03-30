@@ -19,7 +19,7 @@ namespace Intercorp.CEFReports.Services.Controllers
             _reconciliacionPatrimonioApplication = reconciliacionPatrimonioApplication;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> ObtenerReconciliacionPatrimonio(ReconciliacionPatrimonioRequestDTO requestDTO)
         {
             if (requestDTO == null)
@@ -31,7 +31,7 @@ namespace Intercorp.CEFReports.Services.Controllers
 
         }
 
-        [HttpGet("slip/pdf")]
+        [HttpPost("slip/pdf")]
         public async Task<IActionResult> ObtenerReconciliacionPatrimonioPDF(ReconciliacionPatrimonioRequestDTO requestDTO)
         {
             if (requestDTO == null)

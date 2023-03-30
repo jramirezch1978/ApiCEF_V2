@@ -19,7 +19,7 @@ namespace Intercorp.CEFReports.Services.Controllers
             _fuentesUsosFondosxMonedaApplication = fuentesUsosFondosxMonedaApplication;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> ObtenerFuentesUsosFondosxMoneda(CuentaAnalisisRequestDTO requestDTO)
         {
             if (requestDTO == null)
@@ -31,7 +31,7 @@ namespace Intercorp.CEFReports.Services.Controllers
 
         }
 
-        [HttpGet("slip/pdf")]
+        [HttpPost("slip/pdf")]
         public async Task<IActionResult> ObtenerFuentesUsosFondosxMonedaPDF(CuentaAnalisisRequestDTO requestDTO)
         {
             if (requestDTO == null)

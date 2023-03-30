@@ -19,7 +19,7 @@ namespace Intercorp.CEFReports.Services.Controllers
             _desgloseCuentasImportantesApplication = desgloseCuentasImportantesApplication;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> ObtenerDesgloseCuentasImportantes(CuentaAnalisisRequestDTO requestDTO)
         {
             if (requestDTO == null)
@@ -31,7 +31,7 @@ namespace Intercorp.CEFReports.Services.Controllers
 
         }
 
-        [HttpGet("slip/pdf")]
+        [HttpPost("slip/pdf")]
         public async Task<IActionResult> ObtenerDesgloseCuentasImportantesPDF(CuentaAnalisisRequestDTO requestDTO)
         {
             if (requestDTO == null)

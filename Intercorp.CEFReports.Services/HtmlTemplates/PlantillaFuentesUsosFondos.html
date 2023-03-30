@@ -7,100 +7,214 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .divTable{
-	        display: table;
-	        width: 100%;
-	        font-size:10px;
-	        font-family:Arial;
-	        font-weight: bold;
+        .divTable {
+            display: table;
+            width: 100%;
+            font-size: 8px;
+            font-family: Arial;
+            font-weight: bold;
         }
+
+        .divTableDet {
+            display: table;
+            width: 100%;
+            font-size: 8px;
+            font-family: Arial;
+            /*font-weight: bold;*/
+            border-top: 1px solid #999999;
+            border-left: 1px solid #999999;
+            border-bottom: 1px solid #999999;
+            border-collapse: collapse;
+        }
+
         .divTableRow {
-	        display: table-row;
+            display: table-row;
         }
+
         .divTableHeading {
-	        background-color: #EEE;
-	        display: table-header-group;
+            background-color: #EEE;
+            display: table-header-group;
         }
+
         .divTableCell, .divTableHead {
-	        border: 0px;
-	        display: table-cell;
-	        padding: 3px 10px;
+            border: 0px;
+            display: table-cell;
+            padding: 3px 0px;
         }
+
         .divTableHeading {
-	        background-color: #EEE;
-	        display: table-header-group;
-	        font-weight: bold;
+            background-color: #EEE;
+            display: table-header-group;
+            font-weight: bold;
         }
+
         .divTableFoot {
-	        background-color: #EEE;
-	        display: table-footer-group;
-	        font-weight: bold;
+            background-color: #EEE;
+            display: table-footer-group;
+            font-weight: bold;
         }
+
         .divTableBody {
-	        display: table-row-group;
+            display: table-row-group;
         }
-        .divTableDet{
-	        display: table;
-	        width: 100%;
-        }
-        .divTableCellDet, .divTableHead {
-	        border: 1px solid #999999;
-	        display: table-cell;
-	        padding: 3px 10px;
-        }
-        .divTableRowDet {
-	        display: table-row;
-        }
-        .divTableBodyDet {
-	        display: table-row-group;
-	        font-size: 10px;
-	        font-family: Arial;
-        }
+
         .divTableCellDet {
-            width: 70px;
+            border-right: 1px solid #999999;
+            /*font-weight: normal;*/
+            display: table-cell;
+            padding: 1px 1px;
+            font-size: 8px;
         }
-        .divTableCellDescripcion {
-            width: 150px;
+
+        .descripcion {
+            width: 250px;
+        }
+
+        .table .column {
+            width: 40%;
+            float: left;
+            font-size: 7px;
+        }
+
+            .table .column.first {
+                clear: left;
+                width: 60%;
+            }
+
+        .divTableCellDet .column {
+            float: left;
+        }
+
+            .divTableCellDet .column.first {
+                clear: left;
+            }
+
+        .alignRight {
+            text-align: right;
+        }
+
+        .alignLeft {
+            text-align: left;
+        }
+
+        .alignCenter {
+            text-align: center;
+        }
+
+        .bolder {
+            font-weight: bolder;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .width-250 {
+            width: 250px;
+        }
+
+        .width-350 {
+            width: 350px;
+        }
+
+        .width-75 {
+            width: 75px;
+        }
+
+        .width-85 {
+            width: 85px;
+        }
+
+        .border-down {
+            border-bottom: 1px solid #999999;
+        }
+
+        .border-top {
+            border-top: 1px solid #999999;
+        }
+
+        .divTableDet2 {
+            background-color: #d0d0d0;
+            font-weight: bolder;
+        }
+
+        .width-33 {
+            width: 33% !important;
+        }
+
+        .divTableDet .divTableRow {
+            font-size: 8.5px;
+        }
+
+        .size-6 {
+            font-size: 6px;
+        }
+
+        .normalWeight {
+            font-weight: normal !important;
+        }
+
+        .underline {
+            text-decoration: underline;
+        }
+
+        .border-0 {
+            border: 0;
+        }
+
+        .width-100 {
+            width: 100% !important;
+        }
+
+        .width-0 {
+            width: 0 !important;
+        }
+
+        .width-145 {
+            width: 145px !important;
+        }
+
+        .width-45 {
+            width: 45px !important;
         }
     </style>
 </head>
-<body style="max-width:2500px; margin:auto; font-family:Arial">
-    <p class="placa" style="margin: 0;padding: 10px 15px 20px 15px;text-align: left;font-size: 10px;color: #201751;font-weight:bolder">
+<body style="max-width: 600px; margin: 10px; font-family: Arial ">
+    <p class="placa" style="margin: 0; padding: 0px 0px 2px 0px; text-align: left; font-size: 9.5px; color: #201751; font-weight: bolder">
         FUENTES Y USOS DE FONDOS
     </p>
-   
     <div class="divTableDet" style="width: 100%;">
-	    <div class="divTableBodyDet">
-		    <div class="divTableRowDet">
-                <div class="divTableCellDescripcion divTableCellDet">
-                    <div class="divTableCellDetx">&nbsp;</div>
-                    <div class="divTableCellDetx">&nbsp;</div>
-                    <div class="divTableCellDetx">&nbsp;FECHA:</div>
+        <div class="divTableBody">
+            <div class="divTableRow border-down">
+                <div class="divTableCellDet width-145 bolder">
+                    <div class="">&nbsp;</div>
+                    <div class="">&nbsp;</div>
+                    <div class="descripcion column alignRight size-6 width-100 ">&nbsp;FECHA:</div>
                 </div>
-			    <div class="divTableCellDet">
-                    <div class="divTableCellDetx">&nbsp;[Descripcion1]</div>
-			        <div class="divTableCellDetx">&nbsp;[Estado1]</div>
-			        <div class="divTableCellDetx">&nbsp;[FecPeriodo1]</div>
+                <div class="divTableCellDet width-45 alignCenter bolder">
+                    <div class="">&nbsp;[Descripcion1]</div>
+                    <div class="normalWeight">&nbsp;[Estado1]</div>
+                    <div class="">&nbsp;[FecPeriodo1]</div>
                 </div>
-			    <div class="divTableCellDet">
-                    <div class="divTableCellDetx">&nbsp;[Descripcion2]</div>
-			        <div class="divTableCellDetx">&nbsp;[Estado2]</div>
-			        <div class="divTableCellDetx">&nbsp;[FecPeriodo2]</div>
+                <div class="divTableCellDet width-45 alignCenter bolder">
+                    <div class="">&nbsp;[Descripcion2]</div>
+                    <div class="normalWeight">&nbsp;[Estado2]</div>
+                    <div class="">&nbsp;[FecPeriodo2]</div>
                 </div>
-			    <div class="divTableCellDet">
-                    <div class="divTableCellDetx">&nbsp;[Descripcion3]</div>
-			        <div class="divTableCellDetx">&nbsp;[Estado3]</div>
-			        <div class="divTableCellDetx">&nbsp;[FecPeriodo3]</div>
+                <div class="divTableCellDet width-45 alignCenter bolder">
+                    <div class="">&nbsp;[Descripcion3]</div>
+                    <div class="normalWeight">&nbsp;[Estado3]</div>
+                    <div class="">&nbsp;[FecPeriodo3]</div>
                 </div>
-			    <div class="divTableCellDet">
-                    <div class="divTableCellDetx">&nbsp;[Descripcion5]</div>
-			        <div class="divTableCellDetx">&nbsp;[Estado5]</div>
-			        <div class="divTableCellDetx">&nbsp;[FecPeriodo5]</div>
+                <div class="divTableCellDet width-45 alignCenter bolder">
+                    <div class="">&nbsp;[Descripcion5]</div>
+                    <div class="normalWeight">&nbsp;[Estado5]</div>
+                    <div class="">&nbsp;[FecPeriodo5]</div>
                 </div>
-		    </div>
-	    </div>
+            </div>
+            [rows]
+        </div>
     </div>
-
-    [rows]
+    <div class="size-6 bolder">*Para efectos de valorizaciones, se deberá sumar los gastos financieros e impuestos a la utilidad neta.</div>
 </body>
 </html>
